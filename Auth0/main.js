@@ -1,26 +1,23 @@
-const express = require('express');
-const path = require('path');
-const { auth } = require('express-openid-connect')
+let auth0 = null;
+const fetchAuthConfig = () => fetch("/auth_config.json");
+  const configureClient = async () => {
+  const response = await fetchAuthConfig();
+  const config = await response.json();
 
-const app = express();
-
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-app.use(express.static(path.join(__dirname, '..', 'public')));
-app.use(
-  auth({
-    issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
-    baseURL: process.env.BASE_URL,
-    clientID: process.env.AUTH0_CLIENT_ID,
-    secret: process.env.SESSION_SECRET,
-    authRequired: false,
-    auth0Logout: true,
-  }),
-);
-
-app.get('/sign-up', (req, res) => {
-  res.oidc.login({
-    authorizationParams: {
-      screen_hint: 'signup',
-    },
+  auth0 = await createAuth0Client({
+    domain: config.domain,
+    client_id: config.clientId
   });
+};
+
+window.onload = async () => {
+  await configureClient();
+  updateUI();
+};
+
+  const updateUI = async () => {
+  const isAuthenticated = await auth0.isAuthenticated();
+
+  document.getElementById("btn-logout").disabled = !isAuthenticated;
+  document.getElementById("btn-login").disabled = isAuthenticated;
+};
