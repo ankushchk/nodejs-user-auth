@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <title>SPA SDK Sample</title>
     <link rel="stylesheet" type="text/css" />
+    <style>
+        .hidden {
+        display: none;
+        }
+
+      label {
+        margin-bottom: 10px;
+        display: block;
+      }
+    </style>
   </head>
   <body>
     <h2>SPA Authentication Sample</h2>
@@ -11,5 +21,6 @@
     <button id="btn-login" disabled="true" onclick="login()">Log in</button>
     <button id="btn-logout" disabled="true" onclick="logout()">Log out</button>
   </body>
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/1.20/auth0-spa-js.production.js"></script>
   <script src="main.js" defer></script>
 </html>
